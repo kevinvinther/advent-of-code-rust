@@ -1,5 +1,4 @@
 use crate::utils::*;
-use std::cmp;
 use std::collections::HashMap;
 
 /// Part 1
@@ -8,9 +7,7 @@ use std::collections::HashMap;
 /// Running time: O(n log n)
 pub fn part1(input: &str) -> String {
     let numbers = str_to_numbers(input);
-
     let mut vec: [Vec<i32>; 2] = [Vec::new(), Vec::new()];
-
     let mut i = 0;
 
     while i < numbers.len() {
@@ -23,13 +20,9 @@ pub fn part1(input: &str) -> String {
     vec[0].sort();
     vec[1].sort();
 
-    let mut i = 0;
-
     let mut res = 0;
-
-    while i < vec[0].len() {
-        res += cmp::max(vec[0][i], vec[1][i]) - cmp::min(vec[0][i], vec[1][i]);
-        i += 1
+    for i in 0..vec[0].len() {
+        res += (vec[0][i] - vec[1][i]).abs();
     }
 
     res.to_string()
@@ -43,17 +36,17 @@ pub fn part1(input: &str) -> String {
 /// Running time: O(n)
 pub fn part2(input: &str) -> String {
     let numbers: Vec<i32> = str_to_numbers(input);
-
     let mut right: HashMap<i32, i32> = HashMap::new();
+    // 1 for odd indexing
+    let mut i = 1;
 
     // Populate the hashmap
-    let mut i = 1;
     while i < numbers.len() {
         *right.entry(numbers[i]).or_insert(0) += 1;
         i += 2;
     }
 
-    // Notice 0
+    // 0 for even indexing
     let mut j = 0;
     let mut res = 0;
     while j < numbers.len() {
