@@ -48,7 +48,7 @@ fn register_all_solutions(
         HashMap::new();
 
     // Use the macro to register solutions
-    register_solutions!(solutions, year2023::day01, year2024::day01,);
+    register_solutions!(solutions, year2023::day01, year2024::day01, year2024::day02,);
 
     solutions
 }
