@@ -2,15 +2,19 @@ pub fn part1(input: &str) -> String {
     let input: Vec<Vec<char>> = input.lines().map(|line| line.chars().collect()).collect();
     let rows = input.len();
     let cols = input[0].len();
-    let mut res = 0;
 
-    for row in 0..rows {
-        for col in 0..cols {
-            if input[row][col] == 'X' {
-                res += find_xmas(&input, row, col, rows, cols);
+    let res: i32 = (0..rows)
+        .into_iter()
+        .map(|row| {
+            let mut local_res = 0;
+            for col in 0..cols {
+                if input[row][col] == 'X' {
+                    local_res += find_xmas(&input, row, col, rows, cols);
+                }
             }
-        }
-    }
+            local_res
+        })
+        .sum();
 
     res.to_string()
 }
@@ -88,15 +92,19 @@ pub fn part2(input: &str) -> String {
     let input: Vec<Vec<char>> = input.lines().map(|line| line.chars().collect()).collect();
     let rows = input.len();
     let cols = input[0].len();
-    let mut res = 0;
 
-    for row in 1..rows - 1 {
-        for col in 1..cols - 1 {
-            if input[row][col] == 'A' {
-                res += find_x_mas(&input, row, col, rows, cols);
+    let res: i32 = (1..rows - 1)
+        .into_iter()
+        .map(|row| {
+            let mut local_res = 0;
+            for col in 1..cols - 1 {
+                if input[row][col] == 'A' {
+                    local_res += find_x_mas(&input, row, col, rows, cols);
+                }
             }
-        }
-    }
+            local_res
+        })
+        .sum();
 
     res.to_string()
 }
