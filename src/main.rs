@@ -54,6 +54,7 @@ fn register_all_solutions(
         year2024::day01,
         year2024::day02,
         year2024::day03,
+        year2024::day04,
     );
 
     solutions
