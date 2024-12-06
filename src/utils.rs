@@ -25,3 +25,10 @@ pub fn parse_to_vec_of_vec(s: &str) -> Vec<Vec<i32>> {
         })
         .collect()
 }
+
+pub fn input_to_vec_vec_char(s: &str) -> Vec<Vec<char>> {
+    s.lines()
+        .filter(|line| !line.trim().is_empty())
+        .map(|line| line.chars().collect())
+        .collect()
+}
