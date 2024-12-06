@@ -1,4 +1,5 @@
 use crate::utils::input_to_vec_vec_char;
+use rayon::prelude::*;
 use std::collections::HashMap;
 
 #[derive(Debug, Eq, Hash, PartialEq, Clone)]
@@ -123,20 +124,29 @@ fn find_hat(input: &Vec<Vec<char>>, hat: char) -> (usize, usize) {
 }
 
 pub fn part2(input: &str) -> String {
-    let mut res = 0;
-    let mut input = input_to_vec_vec_char(input);
+    let input = input_to_vec_vec_char(input);
 
-    for row in 0..input.len() {
-        for col in 0..input[0].len() {
-            if input[row][col] != '#' && input[row][col] != '^' {
-                input[row][col] = '#';
-                if solve(&input, true) == 1 {
-                    res += 1;
+    let res: i32 = (0..input.len() as i32)
+        .into_par_iter()
+        .map(|row| {
+            let mut local_res = 0;
+            let row = row as usize;
+
+            // Clone the input for this thread
+            let mut local_input = input.clone();
+
+            for col in 0..local_input[0].len() {
+                if local_input[row][col] != '#' && local_input[row][col] != '^' {
+                    local_input[row][col] = '#';
+                    if solve(&local_input, true) == 1 {
+                        local_res += 1;
+                    }
+                    local_input[row][col] = '.';
                 }
-                input[row][col] = '.';
             }
-        }
-    }
+            local_res
+        })
+        .sum();
 
     res.to_string()
 }
