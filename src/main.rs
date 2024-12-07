@@ -30,9 +30,14 @@ fn main() {
         Some((part1_fn, part2_fn)) => {
             let input = aoc::utils::read_input(args.year, args.day);
 
-            // Run and print results for both parts
-            println!("Part 1: {}", part1_fn(&input));
-            println!("Part 2: {}", part2_fn(&input));
+            let duration_part1 = benchmark_solution(*part1_fn, &input);
+            println!("Part 1 result: {}", part1_fn(&input));
+
+            let duration_part2 = benchmark_solution(*part2_fn, &input);
+            println!("Part 2 result: {}", part2_fn(&input));
+            println!("--- Benchmark Time ---");
+            println!("Part 1 time: {:?}", duration_part1);
+            println!("Part 2 time: {:?}", duration_part2);
         }
         None => eprintln!(
             "Solutions for year {} day {} not yet implemented. :(",
@@ -57,7 +62,14 @@ fn register_all_solutions(
         year2024::day04,
         year2024::day05,
         year2024::day06,
+        year2024::day07,
     );
 
     solutions
+}
+
+fn benchmark_solution(part_fn: fn(&str) -> String, input: &str) -> std::time::Duration {
+    let start = std::time::Instant::now();
+    let _ = part_fn(input);
+    start.elapsed()
 }
