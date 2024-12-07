@@ -1,3 +1,5 @@
+use rayon::prelude::*;
+
 enum Operation {
     Addition,
     Multiplication,
@@ -61,44 +63,44 @@ fn parse(input: &str) -> Vec<(u64, Vec<u64>)> {
 
 pub fn part1(input: &str) -> String {
     let equations: Vec<(u64, Vec<u64>)> = parse(&input);
-    let mut states: Vec<(bool, u64)> = Vec::new();
+    let res: u64 = (0..equations.len() as u64)
+        .into_par_iter()
+        .map(|state| -> u64 {
+            let (target, mut nums) = equations.clone()[state as usize].clone();
+            let remove = nums.remove(0);
+            let first = remove;
 
-    for (target, nums) in equations {
-        let mut nums = nums;
-        let first = nums.remove(0);
+            if solve(target, &nums, Operation::Addition, first, false)
+                || solve(target, &nums, Operation::Multiplication, first, false)
+            {
+                return target.clone();
+            } else {
+                return 0;
+            }
+        })
+        .sum();
 
-        let result = solve(target, &nums, Operation::Addition, first, false)
-            || solve(target, &nums, Operation::Multiplication, first, false);
-        states.push((result, target));
-    }
-
-    let mut res = 0;
-    for (result, target) in &states {
-        if *result {
-            res += target;
-        }
-    }
     res.to_string()
 }
 pub fn part2(input: &str) -> String {
     let equations: Vec<(u64, Vec<u64>)> = parse(&input);
-    let mut states: Vec<(bool, u64)> = Vec::new();
+    let res: u64 = (0..equations.len() as u64)
+        .into_par_iter()
+        .map(|state| -> u64 {
+            let (target, mut nums) = equations.clone()[state as usize].clone();
+            let remove = nums.remove(0);
+            let first = remove;
 
-    for (target, nums) in equations {
-        let mut nums = nums;
-        let first = nums.remove(0);
+            if solve(target, &nums, Operation::Addition, first, true)
+                || solve(target, &nums, Operation::Multiplication, first, true)
+                || solve(target, &nums, Operation::Concatenation, first, true)
+            {
+                return target.clone();
+            } else {
+                return 0;
+            }
+        })
+        .sum();
 
-        let result = solve(target, &nums, Operation::Addition, first, true)
-            || solve(target, &nums, Operation::Multiplication, first, true)
-            || solve(target, &nums, Operation::Concatenation, first, true);
-        states.push((result, target));
-    }
-
-    let mut res = 0;
-    for (result, target) in &states {
-        if *result {
-            res += target;
-        }
-    }
     res.to_string()
 }
