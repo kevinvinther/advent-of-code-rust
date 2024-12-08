@@ -63,6 +63,7 @@ fn register_all_solutions(
         year2024::day05,
         year2024::day06,
         year2024::day07,
+        year2024::day08,
     );
 
     solutions
